@@ -133,14 +133,14 @@ class nodes {
 
   template <typename T>
   const T &at(size_t index) const {
-    const T *v = dynamic_cast<const T *>(nodes_[index]);
+    const T *v = static_cast<const T *>(nodes_[index]);
     if (v) return *v;
     throw nn_error("failed to cast");
   }
 
   template <typename T>
   T &at(size_t index) {
-    T *v = dynamic_cast<T *>(nodes_[index]);
+    T *v = static_cast<T *>(nodes_[index]);
     if (v) return *v;
     throw nn_error("failed to cast");
   }
@@ -416,7 +416,7 @@ class graph : public nodes {
 
     // topological-sorting
     while (!input_nodes.empty()) {
-      sorted.push_back(dynamic_cast<layer *>(input_nodes.back()));
+      sorted.push_back(static_cast<layer *>(input_nodes.back()));
       input_nodes.pop_back();
 
       layer *curr              = sorted.back();
@@ -584,9 +584,9 @@ void nodes::save_model(OutputArchive &oa) const {
   oa(cereal::make_nvp("nodes", nodes_));
 
   if (typeid(*this) == typeid(sequential)) {
-    dynamic_cast<const sequential *>(this)->save_connections(oa);
+    static_cast<const sequential *>(this)->save_connections(oa);
   } else {
-    dynamic_cast<const graph *>(this)->save_connections(oa);
+    static_cast<const graph *>(this)->save_connections(oa);
   }
 #else
   throw nn_error("TinyDNN was not built with Serialization support");
@@ -606,9 +606,9 @@ void nodes::load_model(InputArchive &ia) {
   }
 
   if (typeid(*this) == typeid(sequential)) {
-    dynamic_cast<sequential *>(this)->load_connections(ia);
+    static_cast<sequential *>(this)->load_connections(ia);
   } else {
-    dynamic_cast<graph *>(this)->load_connections(ia);
+    static_cast<graph *>(this)->load_connections(ia);
   }
 #else
   throw nn_error("TinyDNN was not built with Serialization support");

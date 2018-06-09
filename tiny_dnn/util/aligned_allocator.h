@@ -15,6 +15,10 @@
 #include <malloc.h>
 #endif
 
+#ifdef ESP32
+#include <malloc.h>
+#endif
+
 #ifdef __MINGW32__
 #include <mm_malloc.h>
 #endif
@@ -87,19 +91,20 @@ class aligned_allocator {
 
  private:
   void *aligned_alloc(size_type align, size_type size) const {
-#if defined(_MSC_VER)
-    return ::_aligned_malloc(size, align);
-#elif defined(__ANDROID__)
-    return ::memalign(align, size);
-#elif defined(__MINGW32__)
-    return ::_mm_malloc(size, align);
-#else  // posix assumed
-    void *p;
-    if (::posix_memalign(&p, align, size) != 0) {
-      p = 0;
-    }
-    return p;
-#endif
+// #if defined(_MSC_VER)
+    // return ::_aligned_malloc(size, align);
+// #elif defined(__ANDROID__)
+    // return ::memalign(align, size);
+// #elif defined(__MINGW32__)
+//     return ::_mm_malloc(size, align);
+return ::malloc(size);
+// #else  // posix assumed
+//     void *p;
+//     if (::posix_memalign(&p, align, size) != 0) {
+//       p = 0;
+//     }
+//     return p;
+// #endif
   }
 
   void aligned_free(pointer ptr) {

@@ -980,7 +980,7 @@ void graph_traverse(layer *root_node, T &&node_callback, U &&edge_callback) {
     for (auto p : prev) {
       // TODO(nyanp): refactoring
       // which type of refactoring do you have in mind for that?
-      layer *l = dynamic_cast<layer *>(p);
+      layer *l = static_cast<layer *>(p);
       if (visited.find(l) == visited.end()) {
         S.push(l);
       }
@@ -990,7 +990,7 @@ void graph_traverse(layer *root_node, T &&node_callback, U &&edge_callback) {
     for (auto n : next) {
       // TODO(nyanp): refactoring
       // which type of refactoring do you have in mind for that?
-      layer *l = dynamic_cast<layer *>(n);
+      layer *l = static_cast<layer *>(n);
       if (visited.find(l) == visited.end()) {
         S.push(l);
       }

@@ -161,8 +161,8 @@ struct index3d {
       throw nn_error(format_str(
         "error while constructing layer: layer size too large for "
         "tiny-dnn\nWidthxHeightxChannels=%dx%dx%d >= max size of "
-        "[%s](=%d)",
-        width, height, depth, typeid(T).name(), std::numeric_limits<T>::max()));
+        "(=%d)",
+        width, height, depth, std::numeric_limits<T>::max()));
   }
 
   T get_index(T x, T y, T channel) const {
